@@ -18,13 +18,21 @@ module Advent.Lib
   ) where
 
 import Prelude
+
+import Control.Plus (class Plus)
 import Data.Array as Array
+import Data.Array.NonEmpty (NonEmptyArray)
+import Data.Array.NonEmpty as NEA
 import Data.Filterable (filterMap)
 import Data.Foldable (class Foldable, foldl, indexl)
 import Data.List (List)
 import Data.List as List
 import Data.List.Lazy as LazyList
+import Data.List.NonEmpty (NonEmptyList(..))
 import Data.Maybe (Maybe)
+import Data.NonEmpty (NonEmpty(..), (:|))
+import Data.NonEmpty as NE
+import Data.Semigroup.Foldable (class Foldable1, foldMap1)
 import Data.Set (Set)
 import Data.Set as Set
 import Data.String (Pattern(..))
@@ -95,6 +103,26 @@ else instance FromFoldable a f LazyList.List where
   fromFoldable = LazyList.fromFoldable
 else instance Ord a ⇒ FromFoldable a f Set where
   fromFoldable = Set.fromFoldable
+-- NonEmpty
+else instance FromFoldable a (NonEmpty f) (NonEmpty f) where
+  fromFoldable = identity
+else instance (Foldable from, FromFoldable a from to) ⇒ FromFoldable a (NonEmpty from) (NonEmpty to) where
+  fromFoldable (x :| xs) = NonEmpty x (fromFoldable xs)
+else instance (Applicative to, Semigroup (to a), Plus to, Foldable1 from) ⇒ FromFoldable a from (NonEmpty to) where
+  fromFoldable xs = foldMap1 NE.singleton xs
+else instance FromFoldable a NonEmptyList NonEmptyArray where
+  fromFoldable = NEA.fromFoldable1
+else instance FromFoldable a NonEmptyArray NonEmptyList where
+  fromFoldable = fromFoldable ∘ NEA.toNonEmpty
+else instance Foldable from ⇒ FromFoldable a (NonEmpty from) NonEmptyArray where
+  fromFoldable = NEA.fromFoldable1
+else instance (FromFoldable a Array to) ⇒ FromFoldable a NonEmptyArray (NonEmpty to) where
+  fromFoldable as = case NEA.toNonEmpty as of
+    x :| xs → NonEmpty x $ fromFoldable xs
+else instance (FromFoldable a List to) ⇒ FromFoldable a NonEmptyList (NonEmpty to) where
+  fromFoldable (NonEmptyList (NonEmpty x xs)) = NonEmpty x ∘ fromFoldable $ xs
+else instance (Foldable from, FromFoldable a from List) ⇒ FromFoldable a (NonEmpty from) NonEmptyList where
+  fromFoldable (NonEmpty x xs) = NonEmptyList ∘ NonEmpty x ∘ fromFoldable $ xs
 
 inRange ∷ ∀ a. Ord a ⇒ a → a → a → Boolean
 inRange a b x

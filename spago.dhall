@@ -22,6 +22,7 @@ You can edit this file as you like.
   , "node-fs"
   , "node-process"
   , "node-streams"
+  , "nonempty"
   , "now"
   , "ordered-collections"
   , "parsing"
@@ -30,6 +31,8 @@ You can edit this file as you like.
   , "strings"
   , "transformers"
   , "tuples"
+  , "unfoldable"
+  , "unsafe-coerce"
   ]
 , packages = ./packages.dhall
 , sources = [ "src/**/*.purs", "test/**/*.purs" ]
