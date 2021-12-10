@@ -4,6 +4,7 @@ import Prelude (class Bounded, class Eq, class Ord, class Show, pure)
 import Advent.Door1 as D1
 import Advent.Door2 as D2
 import Advent.Door3 as D3
+import Advent.Door6 as D6
 import Data.Either (Either(..))
 import Data.Enum (class BoundedEnum, class Enum, Cardinality(..), defaultPred, defaultSucc, fromEnum, toEnum)
 import Data.Generic.Rep (class Generic)
@@ -41,6 +42,7 @@ answer ∷ Door → (Either String String)
 answer Door1 = Right "[1711,1743]"
 answer Door2 = Right "[1815044,1739283308]"
 answer Door3 = Right "[2640986,6822109]"
+answer Door6 = Right "[388419.0,1740449478328.0]"
 
 answer _ = Left "Nothing yet"
 
@@ -119,5 +121,6 @@ open ∷ Door → String → Either String String
 open Door1 = D1.open
 open Door2 = D2.open
 open Door3 = D3.open
+open Door6 = D6.open
 
 open _ = \_ → Left "Nothing yet"
