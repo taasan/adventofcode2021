@@ -27,6 +27,7 @@ You can edit this file as you like.
   , "numbers"
   , "ordered-collections"
   , "parsing"
+  , "partial"
   , "prelude"
   , "psci-support"
   , "strings"
